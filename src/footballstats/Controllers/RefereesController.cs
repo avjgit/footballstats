@@ -53,7 +53,7 @@ namespace footballstats.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Firstname,Lastname")] Referee referee)
+        public async Task<IActionResult> Create([Bind("Id,Uzvards,Vards")] Referee referee)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace footballstats.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Firstname,Lastname")] Referee referee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Uzvards,Vards")] Referee referee)
         {
             if (id != referee.Id)
             {
