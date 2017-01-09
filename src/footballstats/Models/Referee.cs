@@ -8,7 +8,7 @@ namespace footballstats.Models
     public class Referee
     {
         public int Id { get; set; }
-        public int Firstname { get; set; }
-        public int Lastname { get; set; }
+        public string Vards { get; set; }
+        public string Uzvards{ get; set; }
     }
 }
