@@ -50,8 +50,8 @@ namespace footballstats.Controllers
                                 var refereeExists = _context
                                     .Referee
                                     .Any(r =>
-                                        r.Vards == referee.Vards &&
-                                        r.Uzvards == referee.Uzvards);
+                                        r.Firstname == referee.Firstname &&
+                                        r.Lastname == referee.Lastname);
                                 if (!refereeExists)
                                 {
                                     _context.Add(referee);
