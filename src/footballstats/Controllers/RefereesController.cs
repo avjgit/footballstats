@@ -53,7 +53,7 @@ namespace footballstats.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Uzvards,Vards")] Referee referee)
+        public async Task<IActionResult> Create([Bind("Uzvards,Vards")] Referee referee)
         {
             if (ModelState.IsValid)
             {

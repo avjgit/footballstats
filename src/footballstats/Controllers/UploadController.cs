@@ -8,16 +8,20 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Newtonsoft.Json;
 using footballstats.Models;
+using footballstats.Data;
 
 namespace footballstats.Controllers
 {
     public class UploadController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
         private IHostingEnvironment _environment;
 
-        public UploadController(IHostingEnvironment environment)
+        public UploadController(IHostingEnvironment environment, ApplicationDbContext context)
         {
             _environment = environment;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -35,8 +39,27 @@ namespace footballstats.Controllers
                 {
                     using (var fileStream = new StreamReader(file.OpenReadStream()))
                     {
+                        List<Referee> referees;
                         fileContent = fileStream.ReadToEnd();
-                        var referees = JsonConvert.DeserializeObject<List<Referee>>(fileContent);
+                        referees = JsonConvert.DeserializeObject<List<Referee>>(fileContent);
+
+                        if (ModelState.IsValid)
+                        {
+                            foreach (var referee in referees)
+                            {
+                                var refereeExists = _context
+                                    .Referee
+                                    .Any(r =>
+                                        r.Vards == referee.Vards &&
+                                        r.Uzvards == referee.Uzvards);
+                                if (!refereeExists)
+                                {
+                                    _context.Add(referee);
+                                    await _context.SaveChangesAsync();
+                                }
+                        }
+                        }
+                        return RedirectToAction("Index");
                     }
                 }
             }
