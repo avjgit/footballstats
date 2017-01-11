@@ -21,6 +21,12 @@ namespace footballstats.Models
         Forward = 'U'
     }
 
+    public class PlayersNr
+    {
+        public int Id { get; set; }
+        public int Nr { get; set; }
+    }
+
     public class Player
     {
         public int Id { get; set; }

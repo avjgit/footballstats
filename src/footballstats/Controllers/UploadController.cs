@@ -39,9 +39,9 @@ namespace footballstats.Controllers
                 {
                     using (var fileStream = new StreamReader(file.OpenReadStream()))
                     {
-                        Record gameRecord;
+                        GameRecord gameRecord;
                         fileContent = fileStream.ReadToEnd();
-                        gameRecord = JsonConvert.DeserializeObject<Record>(fileContent);
+                        gameRecord = JsonConvert.DeserializeObject<GameRecord>(fileContent);
 
                         if (ModelState.IsValid)
                         {

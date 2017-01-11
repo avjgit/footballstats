@@ -8,9 +8,10 @@ using footballstats.Data;
 namespace footballstats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170111204627_team")]
+    partial class team
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -85,18 +86,14 @@ namespace footballstats.Data.Migrations
                     b.ToTable("Game");
                 });
 
-            modelBuilder.Entity("footballstats.Models.GameRecord", b =>
+            modelBuilder.Entity("footballstats.Models.MainCast", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("SpeleId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SpeleId");
-
-                    b.ToTable("Record");
+                    b.ToTable("MainCast");
                 });
 
             modelBuilder.Entity("footballstats.Models.Player", b =>
@@ -136,25 +133,29 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Nr");
+                    b.Property<int?>("MainCastId");
 
-                    b.Property<int?>("PlayersNrListId");
+                    b.Property<int>("Nr");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayersNrListId");
+                    b.HasIndex("MainCastId");
 
                     b.ToTable("PlayersNr");
                 });
 
-            modelBuilder.Entity("footballstats.Models.PlayersNrList", b =>
+            modelBuilder.Entity("footballstats.Models.Record", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("SpeleId");
+
                     b.HasKey("Id");
 
-                    b.ToTable("PlayersNrList");
+                    b.HasIndex("SpeleId");
+
+                    b.ToTable("Record");
                 });
 
             modelBuilder.Entity("footballstats.Models.Referee", b =>
@@ -180,21 +181,21 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AllPLayersRecordId");
-
                     b.Property<int?>("GameId");
 
-                    b.Property<int?>("MainPlayersRecordId");
+                    b.Property<int?>("MainCastId");
+
+                    b.Property<int?>("PlayersListId");
 
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AllPLayersRecordId");
-
                     b.HasIndex("GameId");
 
-                    b.HasIndex("MainPlayersRecordId");
+                    b.HasIndex("MainCastId");
+
+                    b.HasIndex("PlayersListId");
 
                     b.ToTable("Team");
                 });
@@ -313,13 +314,6 @@ namespace footballstats.Data.Migrations
                         .HasForeignKey("MainRefereeId");
                 });
 
-            modelBuilder.Entity("footballstats.Models.GameRecord", b =>
-                {
-                    b.HasOne("footballstats.Models.Game", "Spele")
-                        .WithMany()
-                        .HasForeignKey("SpeleId");
-                });
-
             modelBuilder.Entity("footballstats.Models.Player", b =>
                 {
                     b.HasOne("footballstats.Models.PlayersList")
@@ -329,9 +323,16 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.PlayersNr", b =>
                 {
-                    b.HasOne("footballstats.Models.PlayersNrList")
+                    b.HasOne("footballstats.Models.MainCast")
                         .WithMany("PlayersNrs")
-                        .HasForeignKey("PlayersNrListId");
+                        .HasForeignKey("MainCastId");
+                });
+
+            modelBuilder.Entity("footballstats.Models.Record", b =>
+                {
+                    b.HasOne("footballstats.Models.Game", "Spele")
+                        .WithMany()
+                        .HasForeignKey("SpeleId");
                 });
 
             modelBuilder.Entity("footballstats.Models.Referee", b =>
@@ -343,17 +344,17 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.Team", b =>
                 {
-                    b.HasOne("footballstats.Models.PlayersList", "AllPLayersRecord")
-                        .WithMany()
-                        .HasForeignKey("AllPLayersRecordId");
-
                     b.HasOne("footballstats.Models.Game")
                         .WithMany("Teams")
                         .HasForeignKey("GameId");
 
-                    b.HasOne("footballstats.Models.PlayersNrList", "MainPlayersRecord")
+                    b.HasOne("footballstats.Models.MainCast", "MainCast")
                         .WithMany()
-                        .HasForeignKey("MainPlayersRecordId");
+                        .HasForeignKey("MainCastId");
+
+                    b.HasOne("footballstats.Models.PlayersList", "PlayersList")
+                        .WithMany()
+                        .HasForeignKey("PlayersListId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

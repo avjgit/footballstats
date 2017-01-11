@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace footballstats.Models
 {
-    public class Record
+    public class GameRecord
     {
         public int Id { get; set; }
 
@@ -31,7 +31,7 @@ namespace footballstats.Models
         [JsonProperty("VT")]
         public Referee MainReferee { get; set; }
 
-        [JsonProperty("Speletajs")]
-        public List<Player> Players { get; set; }
+        [JsonProperty("Komanda")]
+        public List<Team> Teams { get; set; }
     }
 }

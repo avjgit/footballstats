@@ -27,7 +27,7 @@ namespace footballstats.Data
 
         public DbSet<Game> Game { get; set; }
 
-        public DbSet<Record> Record { get; set; }
+        public DbSet<GameRecord> Record { get; set; }
 
         public DbSet<Player> Player { get; set; }
     }
