@@ -26,9 +26,12 @@ namespace footballstats.Models
         public int Spectators { get; set; }
 
         [JsonProperty("T")]
-        public List<Referee> Referees { get; set; }
+        public List<Referee> LineReferees { get; set; }
 
         [JsonProperty("VT")]
-        public Referee Referee { get; set; }
+        public Referee MainReferee { get; set; }
+
+        [JsonProperty("Speletajs")]
+        public List<Player> Players { get; set; }
     }
 }
