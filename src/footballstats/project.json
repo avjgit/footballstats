@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102",
 
   "dependencies": {
@@ -43,7 +43,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "System.Runtime.Serialization.Json": "4.0.1"
   },
 
   "tools": {
