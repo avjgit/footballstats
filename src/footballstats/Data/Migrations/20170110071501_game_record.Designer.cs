@@ -8,9 +8,10 @@ using footballstats.Data;
 namespace footballstats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170110071501_game_record")]
+    partial class game_record
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -70,33 +71,11 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("Place");
-
-                    b.Property<int?>("RefereeId");
-
-                    b.Property<int>("Spectators");
+                    b.Property<string>("Vieta");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RefereeId");
 
                     b.ToTable("Game");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("SpeleId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpeleId");
-
-                    b.ToTable("Record");
                 });
 
             modelBuilder.Entity("footballstats.Models.Referee", b =>
@@ -106,13 +85,9 @@ namespace footballstats.Data.Migrations
 
                     b.Property<string>("Firstname");
 
-                    b.Property<int?>("GameId");
-
                     b.Property<string>("Lastname");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GameId");
 
                     b.ToTable("Referee");
                 });
@@ -222,27 +197,6 @@ namespace footballstats.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Game", b =>
-                {
-                    b.HasOne("footballstats.Models.Referee", "Referee")
-                        .WithMany()
-                        .HasForeignKey("RefereeId");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Record", b =>
-                {
-                    b.HasOne("footballstats.Models.Game", "Spele")
-                        .WithMany()
-                        .HasForeignKey("SpeleId");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Referee", b =>
-                {
-                    b.HasOne("footballstats.Models.Game")
-                        .WithMany("Referees")
-                        .HasForeignKey("GameId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

@@ -24,5 +24,9 @@ namespace footballstats.Data
         }
 
         public DbSet<Referee> Referee { get; set; }
+
+        public DbSet<Game> Game { get; set; }
+
+        public DbSet<Record> Record { get; set; }
     }
 }

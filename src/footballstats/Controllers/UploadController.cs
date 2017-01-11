@@ -39,25 +39,40 @@ namespace footballstats.Controllers
                 {
                     using (var fileStream = new StreamReader(file.OpenReadStream()))
                     {
-                        List<Referee> referees;
+                        Record gameRecord;
                         fileContent = fileStream.ReadToEnd();
-                        referees = JsonConvert.DeserializeObject<List<Referee>>(fileContent);
+                        gameRecord = JsonConvert.DeserializeObject<Record>(fileContent);
 
                         if (ModelState.IsValid)
                         {
-                            foreach (var referee in referees)
-                            {
-                                var refereeExists = _context
-                                    .Referee
-                                    .Any(r =>
-                                        r.Firstname == referee.Firstname &&
-                                        r.Lastname == referee.Lastname);
-                                if (!refereeExists)
-                                {
-                                    _context.Add(referee);
-                                    await _context.SaveChangesAsync();
-                                }
-                        }
+                            //foreach (var game in games)
+                            //{
+                            //var refereeExists = _context
+                            //    .Referee
+                            //    .Any(r =>
+                            //        r.Firstname == game.Referee.Firstname &&
+                            //        r.Lastname == game.Referee.Lastname);
+
+                            //if (!refereeExists)
+                            //{
+                            //    _context.Add(game.Referee);
+                            //}
+
+                            ////todo: add side Refereees 
+                            //var gameExists = _context.Game.Any(g =>
+                            //    g.Date == game.Date &&
+                            //    g.Place == game.Place);
+
+
+                            //if (!gameExists)
+                            //{
+                            _context.Add(gameRecord);
+                            //_context.Add(game.Spele); //?
+                            //}
+                            //}
+
+                            await _context.SaveChangesAsync();
+
                         }
                         return RedirectToAction("Index");
                     }

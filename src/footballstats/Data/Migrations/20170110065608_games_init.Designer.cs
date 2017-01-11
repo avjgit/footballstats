@@ -8,9 +8,10 @@ using footballstats.Data;
 namespace footballstats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170110065608_games_init")]
+    partial class games_init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -83,20 +84,6 @@ namespace footballstats.Data.Migrations
                     b.HasIndex("RefereeId");
 
                     b.ToTable("Game");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("SpeleId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpeleId");
-
-                    b.ToTable("Record");
                 });
 
             modelBuilder.Entity("footballstats.Models.Referee", b =>
@@ -229,13 +216,6 @@ namespace footballstats.Data.Migrations
                     b.HasOne("footballstats.Models.Referee", "Referee")
                         .WithMany()
                         .HasForeignKey("RefereeId");
-                });
-
-            modelBuilder.Entity("footballstats.Models.Record", b =>
-                {
-                    b.HasOne("footballstats.Models.Game", "Spele")
-                        .WithMany()
-                        .HasForeignKey("SpeleId");
                 });
 
             modelBuilder.Entity("footballstats.Models.Referee", b =>
