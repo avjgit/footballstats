@@ -8,9 +8,10 @@ using footballstats.Data;
 namespace footballstats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170112064713_goals")]
+    partial class goals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -99,36 +100,6 @@ namespace footballstats.Data.Migrations
                     b.ToTable("Record");
                 });
 
-            modelBuilder.Entity("footballstats.Models.Goal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("GoalType");
-
-                    b.Property<int?>("GoalsListId");
-
-                    b.Property<int>("PlayerNr");
-
-                    b.Property<string>("TimeRecord");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoalsListId");
-
-                    b.ToTable("Goal");
-                });
-
-            modelBuilder.Entity("footballstats.Models.GoalsList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GoalsList");
-                });
-
             modelBuilder.Entity("footballstats.Models.PenaltiesList", b =>
                 {
                     b.Property<int>("Id")
@@ -202,15 +173,11 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("GoalId");
-
                     b.Property<int>("Nr");
 
                     b.Property<int?>("PlayersNrListId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GoalId");
 
                     b.HasIndex("PlayersNrListId");
 
@@ -254,8 +221,6 @@ namespace footballstats.Data.Migrations
 
                     b.Property<int?>("GameId");
 
-                    b.Property<int?>("GoalsRecordId");
-
                     b.Property<int?>("MainPlayersRecordId");
 
                     b.Property<int?>("PenaltiesRecordId");
@@ -267,8 +232,6 @@ namespace footballstats.Data.Migrations
                     b.HasIndex("AllPLayersRecordId");
 
                     b.HasIndex("GameId");
-
-                    b.HasIndex("GoalsRecordId");
 
                     b.HasIndex("MainPlayersRecordId");
 
@@ -398,13 +361,6 @@ namespace footballstats.Data.Migrations
                         .HasForeignKey("SpeleId");
                 });
 
-            modelBuilder.Entity("footballstats.Models.Goal", b =>
-                {
-                    b.HasOne("footballstats.Models.GoalsList")
-                        .WithMany("Goals")
-                        .HasForeignKey("GoalsListId");
-                });
-
             modelBuilder.Entity("footballstats.Models.Penalty", b =>
                 {
                     b.HasOne("footballstats.Models.PenaltiesList")
@@ -429,10 +385,6 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.PlayersNr", b =>
                 {
-                    b.HasOne("footballstats.Models.Goal")
-                        .WithMany("Passers")
-                        .HasForeignKey("GoalId");
-
                     b.HasOne("footballstats.Models.PlayersNrList")
                         .WithMany("PlayersNrs")
                         .HasForeignKey("PlayersNrListId");
@@ -454,10 +406,6 @@ namespace footballstats.Data.Migrations
                     b.HasOne("footballstats.Models.Game")
                         .WithMany("Teams")
                         .HasForeignKey("GameId");
-
-                    b.HasOne("footballstats.Models.GoalsList", "GoalsRecord")
-                        .WithMany()
-                        .HasForeignKey("GoalsRecordId");
 
                     b.HasOne("footballstats.Models.PlayersNrList", "MainPlayersRecord")
                         .WithMany()

@@ -13,18 +13,9 @@ namespace footballstats.Models
         [JsonProperty("Laiks")]
         public string TimeRecord { get; set; }
 
-        public int Nr { get; set; }
+        [JsonProperty("Nr")]
+        public int PlayerNr { get; set; }
 
-        public TimeSpan Time
-        {
-            get
-            {
-                var time = TimeRecord.Split(':');
-                return new TimeSpan(
-                    hours: 0, 
-                    minutes: int.Parse(time[0]), 
-                    seconds: int.Parse(time[1]));
-            }
-        }
+        public TimeSpan Time => Parser.GetTime(TimeRecord);
     }
 }

@@ -25,8 +25,18 @@ namespace footballstats.Models
 
     public class PenaltiesList
     {
+        public int Id { get; set; }
+
         [JsonProperty("Sods")]
         public List<Penalty> Penalties { get; set; }
+    }
+
+    public class GoalsList
+    {
+        public int Id { get; set; }
+
+        [JsonProperty("VG")]
+        public List<Goal> Goals { get; set; }
     }
 
 
@@ -45,6 +55,9 @@ namespace footballstats.Models
 
         [JsonProperty("Sodi")]
         public PenaltiesList PenaltiesRecord { get; set; }
+
+        [JsonProperty("Varti")]
+        public GoalsList GoalsRecord { get; set; }
 
         // todo: add for Penalties (under Player?)
         public List<Player> AllPLayers { get; set; }
