@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using footballstats.Data;
 using footballstats.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace footballstats.Controllers
 {
@@ -167,6 +170,57 @@ namespace footballstats.Controllers
             _context.Record.RemoveRange(_context.Record);
 
             await _context.SaveChangesAsync();
+            return View("Index", await _context.Game.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(ICollection<IFormFile> files)
+        {
+            var fileContent = String.Empty;
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    using (var fileStream = new StreamReader(file.OpenReadStream()))
+                    {
+                        GameRecord gameRecord;
+                        fileContent = fileStream.ReadToEnd();
+                        gameRecord = JsonConvert.DeserializeObject<GameRecord>(fileContent);
+
+                        if (ModelState.IsValid)
+                        {
+                            //foreach (var game in games)
+                            //{
+                            //var refereeExists = _context
+                            //    .Referee
+                            //    .Any(r =>
+                            //        r.Firstname == game.Referee.Firstname &&
+                            //        r.Lastname == game.Referee.Lastname);
+
+                            //if (!refereeExists)
+                            //{
+                            //    _context.Add(game.Referee);
+                            //}
+
+                            ////todo: add side Refereees 
+                            //var gameExists = _context.Game.Any(g =>
+                            //    g.Date == game.Date &&
+                            //    g.Place == game.Place);
+
+
+                            //if (!gameExists)
+                            //{
+                            _context.Add(gameRecord);
+                            //_context.Add(game.Spele); //?
+                            //}
+                            //}
+
+                            await _context.SaveChangesAsync();
+
+                        }
+                    }
+                }
+            }
             return View("Index", await _context.Game.ToListAsync());
         }
     }
