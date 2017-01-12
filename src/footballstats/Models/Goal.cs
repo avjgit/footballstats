@@ -32,6 +32,7 @@ namespace footballstats.Models
         public GoalType GoalType { get; set; }
 
         [JsonProperty("P")]
+        [JsonConverter(typeof(SingleOrArrayConverter<PlayersNr>))]
         public List<PlayersNr> Passers { get; set; }
 
         public TimeSpan Time => Parser.GetTime(TimeRecord);

@@ -9,6 +9,7 @@ namespace footballstats.Models
         public int Id { get; set; }
 
         [JsonProperty("Maina")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Change>))]
         public List<Change> Changes { get; set; }
     }
 

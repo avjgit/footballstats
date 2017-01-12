@@ -28,6 +28,7 @@ namespace footballstats.Models
         public int Id { get; set; }
 
         [JsonProperty("Sods")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Penalty>))]
         public List<Penalty> Penalties { get; set; }
     }
 
@@ -36,6 +37,7 @@ namespace footballstats.Models
         public int Id { get; set; }
 
         [JsonProperty("VG")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Goal>))]
         public List<Goal> Goals { get; set; }
     }
 
