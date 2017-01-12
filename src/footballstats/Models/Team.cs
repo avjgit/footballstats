@@ -7,41 +7,6 @@ using System.Threading.Tasks;
 
 namespace footballstats.Models
 {
-    public class PlayersList
-    {
-        public int Id { get; set; }
-
-        [JsonProperty("Speletajs")]
-        public List<Player> Players { get; set; }
-    }
-
-    public class PlayersNrList
-    {
-        public int Id { get; set; }
-
-        [JsonProperty("Speletajs")]
-        public List<PlayersNr> PlayersNrs { get; set; }
-    }
-
-    public class PenaltiesList
-    {
-        public int Id { get; set; }
-
-        [JsonProperty("Sods")]
-        [JsonConverter(typeof(SingleOrArrayConverter<Penalty>))]
-        public List<Penalty> Penalties { get; set; }
-    }
-
-    public class GoalsList
-    {
-        public int Id { get; set; }
-
-        [JsonProperty("VG")]
-        [JsonConverter(typeof(SingleOrArrayConverter<Goal>))]
-        public List<Goal> Goals { get; set; }
-    }
-
-
     public class Team
     {
         public int Id { get; set; }

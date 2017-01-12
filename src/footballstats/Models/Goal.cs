@@ -37,4 +37,13 @@ namespace footballstats.Models
 
         public TimeSpan Time => Parser.GetTime(TimeRecord);
     }
+
+    public class GoalsList
+    {
+        public int Id { get; set; }
+
+        [JsonProperty("VG")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Goal>))]
+        public List<Goal> Goals { get; set; }
+    }
 }

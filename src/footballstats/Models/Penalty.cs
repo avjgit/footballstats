@@ -18,4 +18,13 @@ namespace footballstats.Models
 
         public TimeSpan Time => Parser.GetTime(TimeRecord);
     }
+    public class PenaltiesList
+    {
+        public int Id { get; set; }
+
+        [JsonProperty("Sods")]
+        [JsonConverter(typeof(SingleOrArrayConverter<Penalty>))]
+        public List<Penalty> Penalties { get; set; }
+    }
+
 }

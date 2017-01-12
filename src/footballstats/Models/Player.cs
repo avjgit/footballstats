@@ -44,4 +44,20 @@ namespace footballstats.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public PlayerRole Role { get; set; }
     }
+
+    public class PlayersList
+    {
+        public int Id { get; set; }
+
+        [JsonProperty("Speletajs")]
+        public List<Player> Players { get; set; }
+    }
+
+    public class PlayersNrList
+    {
+        public int Id { get; set; }
+
+        [JsonProperty("Speletajs")]
+        public List<PlayersNr> PlayersNrs { get; set; }
+    }
 }
