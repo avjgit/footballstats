@@ -74,7 +74,6 @@ namespace footballstats.Controllers
                             await _context.SaveChangesAsync();
 
                         }
-                        return RedirectToAction("Index");
                     }
                 }
             }

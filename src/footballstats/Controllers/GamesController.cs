@@ -147,5 +147,27 @@ namespace footballstats.Controllers
         {
             return _context.Game.Any(e => e.Id == id);
         }
+
+        // GET: Games/DeleteAll
+        public async Task<IActionResult> DeleteAll()
+        {
+            _context.Player.RemoveRange(_context.Player);
+            _context.PlayersList.RemoveRange(_context.PlayersList);
+            _context.PlayersNr.RemoveRange(_context.PlayersNr);
+            _context.PlayersNrList.RemoveRange(_context.PlayersNrList);
+            _context.Penalty.RemoveRange(_context.Penalty);
+            _context.PenaltiesList.RemoveRange(_context.PenaltiesList);
+            _context.Goal.RemoveRange(_context.Goal);
+            _context.GoalsList.RemoveRange(_context.GoalsList);
+            _context.Change.RemoveRange(_context.Change);
+            _context.ChangeRecord.RemoveRange(_context.ChangeRecord);
+            _context.Referee.RemoveRange(_context.Referee);
+            _context.Team.RemoveRange(_context.Team);
+            _context.Game.RemoveRange(_context.Game);
+            _context.Record.RemoveRange(_context.Record);
+
+            await _context.SaveChangesAsync();
+            return View("Index", await _context.Game.ToListAsync());
+        }
     }
 }
