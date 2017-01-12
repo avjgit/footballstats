@@ -59,6 +59,9 @@ namespace footballstats.Models
         [JsonProperty("Varti")]
         public GoalsList GoalsRecord { get; set; }
 
+        [JsonProperty("Mainas")]
+        public ChangeRecord ChangeRecord { get; set; }
+
         // todo: add for Penalties (under Player?)
         public List<Player> AllPLayers { get; set; }
 
