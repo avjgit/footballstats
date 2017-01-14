@@ -43,6 +43,8 @@ namespace footballstats.Models
         [JsonProperty("Loma")]
         [JsonConverter(typeof(StringEnumConverter))]
         public PlayerRole Role { get; set; }
+
+        public Team Team { get; set; }
     }
 
     public class PlayersList

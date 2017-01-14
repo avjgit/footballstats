@@ -15,8 +15,17 @@ namespace footballstats.Models
 
     public class Change
     {
+        #region Domain
         public int Id { get; set; }
 
+        public Player PlayerIn_ { get; set; }
+
+        public Player PlayerOut_ { get; set; }
+
+        public TimeSpan Time { get; set; }
+        #endregion
+
+        #region JSON fields
         [JsonProperty("Laiks")]
         public string TimeRecord { get; set; }
 
@@ -25,7 +34,6 @@ namespace footballstats.Models
 
         [JsonProperty("Nr2")]
         public int PlayerIn { get; set; }
-
-        public TimeSpan Time => Parser.GetTime(TimeRecord);
+        #endregion
     }
 }

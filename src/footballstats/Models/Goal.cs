@@ -20,22 +20,30 @@ namespace footballstats.Models
 
     public class Goal
     {
+        #region Domain
         public int Id { get; set; }
 
+        public TimeSpan Time { get; set; }
+
+        public Player Player { get; set; }
+
+        public List<Player> PlayersPassed { get; set; }
+
+        [JsonProperty("Sitiens")]
+        public GoalType GoalType { get; set; }
+        #endregion
+
+        #region JSON
         [JsonProperty("Laiks")]
         public string TimeRecord { get; set; }
 
         [JsonProperty("Nr")]
         public int PlayerNr { get; set; }
 
-        [JsonProperty("Sitiens")]
-        public GoalType GoalType { get; set; }
-
         [JsonProperty("P")]
         [JsonConverter(typeof(SingleOrArrayConverter<PlayersNr>))]
         public List<PlayersNr> Passers { get; set; }
-
-        public TimeSpan Time => Parser.GetTime(TimeRecord);
+        #endregion
     }
 
     public class GoalsList
