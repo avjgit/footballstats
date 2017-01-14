@@ -8,6 +8,7 @@ using footballstats.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Newtonsoft.Json;
+using footballstats.Utils;
 
 namespace footballstats.Controllers
 {
@@ -174,6 +175,8 @@ namespace footballstats.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(ICollection<IFormFile> files)
         {
+            var db = new Repository(_context);
+
             foreach (var file in files)
             {
                 if (file.Length > 0)
@@ -184,17 +187,7 @@ namespace footballstats.Controllers
 
                         if (ModelState.IsValid)
                         {
-                            var gameExists = _context.Record.Any(g =>
-                                g.Spele.Date == gameRecord.Spele.Date &&
-                                g.Spele.Place == gameRecord.Spele.Place &&
-                                g.Spele.Teams.All(t => 
-                                    gameRecord.Spele.Teams.Any(tx => 
-                                        tx.Title == t.Title)));
-
-                            if (!gameExists)
-                            {
-                                _context.Add(gameRecord);
-                            }
+                            db.Save(gameRecord);
 
                             await _context.SaveChangesAsync();
                         }
