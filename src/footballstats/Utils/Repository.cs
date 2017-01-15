@@ -4,46 +4,42 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace footballstats.Utils
 {
     public class Repository
     {
+        DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+
+        public Repository()
+        {
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102;Trusted_Connection=True;MultipleActiveResultSets=true;");
+        }
+
         public void Save(Game game)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102;Trusted_Connection=True;MultipleActiveResultSets=true;");
-
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
             {
                 if (GameExists(context, game))
                     return;
 
-                var lineReferees = game.LineReferees;
-                game.LineReferees = new List<Referee>();
-                foreach (var referee in lineReferees)
-                {
-                    game.LineReferees.Add(GetOrCreate(context, referee));
-                }
-
-                game.MainReferee = GetOrCreate(context, game.MainReferee);
-
-                //var composedGame = Create(game);
+                game.LineReferees = GetIfExists(context, game.LineReferees);
+                game.MainReferee = GetIfExists(context, game.MainReferee);
 
                 context.Add(game);
                 context.SaveChanges();
             }
         }
 
-        //public void DetachAll()
-        //{
-        //    foreach (var dbEntityEntry in _context.ChangeTracker.Entries())
-        //        if (dbEntityEntry.Entity != null)
-        //            dbEntityEntry.State = EntityState.Detached;
-        //}
+        public List<T> GetIfExists<T>(ApplicationDbContext _context, List<T> objList)
+        {
+            var listWithIds = new List<T>();
+            objList.ForEach(obj => listWithIds.Add(GetIfExists(_context, (dynamic)obj)));
+            return listWithIds;
+        }
 
-        public Referee GetOrCreate(ApplicationDbContext _context, Referee r)
+        public Referee GetIfExists(ApplicationDbContext _context, Referee r)
         {
             var referee = _context
                 .Referee
@@ -66,15 +62,5 @@ namespace footballstats.Utils
                 json.Place == g.Place &&
                 json.Teams.All(jsonTeam => g.Teams.Any(
                     dbteam => dbteam.Title == jsonTeam.Title)));
-
-        //public Game Create(Game json) => new Game
-        //{
-        //    Date = json.Date,
-        //    Place = json.Place,
-        //    Spectators = json.Spectators,
-        //    LineReferees = json.LineReferees,
-        //    MainReferee = json.MainReferee
-        //};
-
     }
 }
