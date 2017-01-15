@@ -29,9 +29,7 @@ namespace footballstats.Controllers
             const int lossDuringAddedTimePoints = 2;
             const int lossDuringMainTimePoints = 1;
 
-            var teams = from t in _context.DomainTeam select t;
-
-            foreach (var team in teams)
+            foreach (var team in _context.DomainTeam)
             {
                 team.GoalsWon = _context
                     .Team
@@ -88,15 +86,17 @@ namespace footballstats.Controllers
                     + team.WinsDuringAddedTime * winDuringAddedTimePoints
                     + team.LossesDuringAddedTime * lossDuringAddedTimePoints
                     + team.LossesDuringMainTime * lossDuringMainTimePoints;
-
+                        
             }
 
-            foreach (var team in  teams)
+            foreach (var e in  _context.DomainTeam)
             {
-                team.Place = teams.Where(t => t.Points > team.Points).Count() + 1;
+                e.Place = _context.DomainTeam.Where(p => p.Points > e.Points).Count() + 1;
             }
-            teams = teams.OrderByDescending(t => t.Points);
-            return View(await teams.ToListAsync());
+
+            var teams = from m in _context.DomainTeam select m;
+            var teamsOrdered = teams.OrderByDescending(t => t.Points);
+            return View(await teamsOrdered.ToListAsync());
         }
 
         // GET: DomainTeams/Details/5
