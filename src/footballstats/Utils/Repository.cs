@@ -56,6 +56,30 @@ namespace footballstats.Utils
                 context.SaveChanges();
                 team.AllPLayersRecord = new PlayersList();
 
+                if (team.GoalsRecord != null)
+                {
+                    foreach (var goal in team.GoalsRecord.Goals)
+                    {
+                        goal.Time = GetTime(goal.TimeRecord);
+                    }
+                }
+
+                if (team.PenaltiesRecord != null)
+                {
+                    foreach (var penalty in team.PenaltiesRecord.Penalties)
+                    {
+                        penalty.Time = GetTime(penalty.TimeRecord);
+                    }
+                }
+
+                if (team.ChangeRecord != null)
+                {
+                    foreach (var change in team.ChangeRecord.Changes)
+                    {
+                        change.Time = GetTime(change.TimeRecord);
+                    }
+                }
+
                 AddDomainTeamIfNotExits(team);
 
             }

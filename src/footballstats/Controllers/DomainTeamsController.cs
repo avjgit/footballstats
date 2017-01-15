@@ -22,6 +22,8 @@ namespace footballstats.Controllers
         // GET: DomainTeams
         public async Task<IActionResult> Index()
         {
+            const int mainTime = 60;
+
             foreach (var team in _context.DomainTeam)
             {
                 team.GoalsWon = _context
@@ -36,6 +38,44 @@ namespace footballstats.Controllers
                     .SelectMany(game => game.Teams.Where(t => t.Title != team.Title))
                     .SelectMany(t => t.GoalsRecord.Goals)
                     .Count();
+
+                var gamesCount = _context.Game.Where(g => g.Teams.Any(t => t.Title == team.Title)).Count();
+
+                team.WinsDuringMainTime = _context
+                    .Game
+                    .Where(g =>
+                        g.Teams.Any(t => t.Title == team.Title) && (
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Count() >
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Count()) &&
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Max(x => x.Time).TotalMinutes <= mainTime
+                    ).Count();
+
+                team.WinsDuringAddedTime = _context
+                    .Game
+                    .Where(g =>
+                        g.Teams.Any(t => t.Title == team.Title) && (
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Count() >
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Count()) &&
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Max(x => x.Time).TotalMinutes > mainTime
+                    ).Count();
+
+                team.LossesDuringMainTime = _context
+                    .Game
+                    .Where(g =>
+                        g.Teams.Any(t => t.Title == team.Title) && (
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Count() <
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Count()) &&
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Max(x => x.Time).TotalMinutes <= mainTime
+                    ).Count();
+
+                team.LossesDuringAddedTime = _context
+                    .Game
+                    .Where(g =>
+                        g.Teams.Any(t => t.Title == team.Title) && (
+                        g.Teams.Where(t => t.Title == team.Title).SelectMany(t => t.GoalsRecord.Goals).Count() <
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Count()) &&
+                        g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Max(x => x.Time).TotalMinutes > mainTime
+                    ).Count();
             }
             return View(await _context.DomainTeam.ToListAsync());
         }
