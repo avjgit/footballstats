@@ -33,5 +33,6 @@ namespace footballstats.Data
         public DbSet<PlayersNr> PlayersNr { get; set; }
         public DbSet<PlayersList> PlayersList { get; set; }
         public DbSet<Player> Player { get; set; }
+        public DbSet<DomainTeam> DomainTeam { get; set; }
     }
 }

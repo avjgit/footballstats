@@ -1,0 +1,66 @@
+@model footballstats.Models.DomainTeam
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DomainTeam</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GoalsLost)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GoalsLost)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GoalsWon)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GoalsWon)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LossesDuringAddedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LossesDuringAddedTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LossesDuringMainTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LossesDuringMainTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WinsDuringAddedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WinsDuringAddedTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WinsDuringMainTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WinsDuringMainTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -55,9 +55,10 @@ namespace footballstats.Utils
                 }
                 context.SaveChanges();
                 team.AllPLayersRecord = new PlayersList();
-            }
 
-            game.Teams = GetIfExists(game.Teams);
+                AddDomainTeamIfNotExits(team);
+
+            }
 
             context.Add(game);
             context.SaveChanges();
@@ -70,12 +71,24 @@ namespace footballstats.Utils
             return listWithIds;
         }
 
+        public void AddDomainTeamIfNotExits(Team jsonTeam)
+        {
+            if (!context.DomainTeam.Any(t => t.Title == jsonTeam.Title))
+            {
+                var team = new DomainTeam
+                {
+                    Title = jsonTeam.Title
+                };
+                context.Add(team);
+            }
+        }
         public void AddIfNotExists(Player jsonEntity)
         {
             var player = GetIfExists(jsonEntity);
             if (player.Id == 0)
                 context.Add(player);
         }
+
         public Player GetIfExists(Player jsonEntity)
         {
             var dbEntity = context
