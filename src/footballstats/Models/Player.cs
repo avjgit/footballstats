@@ -44,7 +44,7 @@ namespace footballstats.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public PlayerRole Role { get; set; }
 
-        public Team Team { get; set; }
+        public string Team { get; set; }
     }
 
     public class PlayersList

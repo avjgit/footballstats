@@ -45,6 +45,18 @@ namespace footballstats.Utils
 
             game.LineReferees = GetIfExists(game.LineReferees);
             game.MainReferee = GetIfExists(game.MainReferee);
+
+            foreach (var team in game.Teams)
+            {
+                foreach (var player in team.AllPLayersRecord.Players)
+                {
+                    player.Team = team.Title;
+                    AddIfNotExists(player);
+                }
+                context.SaveChanges();
+                team.AllPLayersRecord = new PlayersList();
+            }
+
             game.Teams = GetIfExists(game.Teams);
 
             context.Add(game);
@@ -56,6 +68,32 @@ namespace footballstats.Utils
             var listWithIds = new List<T>();
             objList.ForEach(obj => listWithIds.Add(GetIfExists((dynamic)obj)));
             return listWithIds;
+        }
+
+        public void AddIfNotExists(Player jsonEntity)
+        {
+            var player = GetIfExists(jsonEntity);
+            if (player.Id == 0)
+                context.Add(player);
+        }
+        public Player GetIfExists(Player jsonEntity)
+        {
+            var dbEntity = context
+                .Player
+                .AsNoTracking()
+                .FirstOrDefault(x =>
+                    x.Firstname == jsonEntity.Firstname &&
+                    x.Lastname == jsonEntity.Lastname &&
+                    x.Number == jsonEntity.Number &&
+                    x.Team == jsonEntity.Team);
+
+            if (dbEntity != null)
+            {
+                context.Entry(dbEntity).State = EntityState.Modified;
+                return dbEntity;
+            }
+
+            return jsonEntity;
         }
 
         public Team GetIfExists(Team jsonEntity)
