@@ -22,7 +22,27 @@ namespace footballstats.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Player.ToListAsync());
+            foreach (var player in _context.Player)
+            {
+                player.Goals = _context
+                    .Game
+                    .SelectMany(g => g.Teams.Where(t => t.Title == player.Team))
+                    .SelectMany(a => a.GoalsRecord.Goals)
+                    .Where(b => b.PlayerNr == player.Number)
+                    .Count();
+
+                player.Passes = _context
+                    .Game
+                    .SelectMany(c => c.Teams.Where(d => d.Title == player.Team))
+                    .SelectMany(e => e.GoalsRecord.Goals)
+                    .SelectMany(f => f.Passers)
+                    .Where(h => h.Nr == player.Number)
+                    .Count();
+            }
+            return View(await _context
+                .Player
+                .OrderByDescending(p => p.Goals)
+                .ThenByDescending(z => z.Passes).ToListAsync());
         }
 
         // GET: Players/Details/5

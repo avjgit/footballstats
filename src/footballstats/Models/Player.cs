@@ -45,6 +45,10 @@ namespace footballstats.Models
         public PlayerRole Role { get; set; }
 
         public string Team { get; set; }
+
+        public int Goals { get; set; }
+
+        public int Passes { get; set; }
     }
 
     public class PlayersList
