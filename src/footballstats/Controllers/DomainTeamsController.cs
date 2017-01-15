@@ -24,6 +24,11 @@ namespace footballstats.Controllers
         {
             const int mainTime = 60;
 
+            const int winDuringMainTimePoints = 5;
+            const int winDuringAddedTimePoints = 3;
+            const int lossDuringAddedTimePoints = 2;
+            const int lossDuringMainTimePoints = 1;
+
             foreach (var team in _context.DomainTeam)
             {
                 team.GoalsWon = _context
@@ -76,6 +81,11 @@ namespace footballstats.Controllers
                         g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Count()) &&
                         g.Teams.Where(t => t.Title != team.Title).SelectMany(t => t.GoalsRecord.Goals).Max(x => x.Time).TotalMinutes > mainTime
                     ).Count();
+
+                team.Points = team.WinsDuringMainTime * winDuringMainTimePoints
+                    + team.WinsDuringAddedTime * winDuringAddedTimePoints
+                    + team.LossesDuringAddedTime * lossDuringAddedTimePoints
+                    + team.LossesDuringMainTime * lossDuringMainTimePoints;
             }
             return View(await _context.DomainTeam.ToListAsync());
         }
