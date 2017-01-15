@@ -81,7 +81,7 @@ namespace footballstats
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Games}/{action=Index}/{id?}");
+                    template: "{controller=DomainTeams}/{action=Index}/{id?}");
             });
         }
     }

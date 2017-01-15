@@ -22,6 +22,21 @@ namespace footballstats.Controllers
         // GET: DomainTeams
         public async Task<IActionResult> Index()
         {
+            foreach (var team in _context.DomainTeam)
+            {
+                team.GoalsWon = _context
+                    .Team
+                    .Where(t => t.Title == team.Title)
+                    .SelectMany(t => t.GoalsRecord.Goals)
+                    .Count();
+
+                team.GoalsLost = _context
+                    .Game
+                    .Where(game => game.Teams.Any(t => t.Title == team.Title))
+                    .SelectMany(game => game.Teams.Where(t => t.Title != team.Title))
+                    .SelectMany(t => t.GoalsRecord.Goals)
+                    .Count();
+            }
             return View(await _context.DomainTeam.ToListAsync());
         }
 
