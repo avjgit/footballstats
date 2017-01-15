@@ -1,47 +1,67 @@
 ﻿using footballstats.Data;
 using footballstats.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace footballstats.Utils
 {
+    public static class ParsingManager
+    {
+
+        public static void Parse(IFormFile file)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102;Trusted_Connection=True;MultipleActiveResultSets=true;");
+
+            using (var fileStream = new StreamReader(file.OpenReadStream()))
+            {
+                var gameRecord = JsonConvert.DeserializeObject<GameRecord>(fileStream.ReadToEnd());
+
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    new Repository(context).Save(gameRecord.Spele);
+                }
+            }
+        }
+    }
+
     public class Repository
     {
-        DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        ApplicationDbContext context;
 
-        public Repository()
+        public Repository(ApplicationDbContext _context)
         {
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102;Trusted_Connection=True;MultipleActiveResultSets=true;");
+            context = _context;
         }
 
         public void Save(Game game)
         {
-            using (var context = new ApplicationDbContext(optionsBuilder.Options))
-            {
-                if (GameExists(context, game))
-                    return;
+            if (GameExists(game))
+                return;
 
-                game.LineReferees = GetIfExists(context, game.LineReferees);
-                game.MainReferee = GetIfExists(context, game.MainReferee);
+            game.LineReferees = GetIfExists(game.LineReferees);
+            game.MainReferee = GetIfExists(game.MainReferee);
 
-                context.Add(game);
-                context.SaveChanges();
-            }
+            context.Add(game);
+            context.SaveChanges();
         }
 
-        public List<T> GetIfExists<T>(ApplicationDbContext _context, List<T> objList)
+        public List<T> GetIfExists<T>(List<T> objList)
         {
             var listWithIds = new List<T>();
-            objList.ForEach(obj => listWithIds.Add(GetIfExists(_context, (dynamic)obj)));
+            objList.ForEach(obj => listWithIds.Add(GetIfExists((dynamic)obj)));
             return listWithIds;
         }
 
-        public Referee GetIfExists(ApplicationDbContext _context, Referee r)
+        public Referee GetIfExists(Referee r)
         {
-            var referee = _context
+            var referee = context
                 .Referee
                 .AsNoTracking()
                 .FirstOrDefault(x =>
@@ -50,17 +70,27 @@ namespace footballstats.Utils
 
             if (referee != null)
             {
-                _context.Entry(referee).State = EntityState.Modified;
+                context.Entry(referee).State = EntityState.Modified;
                 return referee;
             }
             return r;
         }
 
-        public bool GameExists(ApplicationDbContext _context, Game json) =>
-            _context.Game.Any(g =>
+        public bool GameExists(Game json) =>
+            context.Game.Any(g =>
                 json.Date == g.Date &&
                 json.Place == g.Place &&
                 json.Teams.All(jsonTeam => g.Teams.Any(
                     dbteam => dbteam.Title == jsonTeam.Title)));
+
+
+        public static TimeSpan GetTime(string timeRecord)
+        {
+            var time = timeRecord.Split(':');
+            int hours = 0;
+            int minutes = int.Parse(time[0]);
+            int seconds = int.Parse(time[1]);
+            return new TimeSpan(hours, minutes, seconds);
+        }
     }
 }

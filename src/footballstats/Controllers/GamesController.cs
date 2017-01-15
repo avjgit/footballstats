@@ -175,23 +175,10 @@ namespace footballstats.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(ICollection<IFormFile> files)
         {
-            var db = new Repository();
+            foreach (var file in files.Where(f => f.Length > 0))
+                if (ModelState.IsValid)
+                    ParsingManager.Parse(file);
 
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-                    using (var fileStream = new StreamReader(file.OpenReadStream()))
-                    {
-                        var gameRecord = JsonConvert.DeserializeObject<GameRecord>(fileStream.ReadToEnd());
-
-                        if (ModelState.IsValid)
-                        {
-                            db.Save(gameRecord.Spele);
-                        }
-                    }
-                }
-            }
             return View("Index", await _context.Game.ToListAsync());
         }
     }
