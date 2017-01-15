@@ -12,7 +12,6 @@ namespace footballstats.Utils
 {
     public static class ParsingManager
     {
-
         public static void Parse(IFormFile file)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -46,7 +45,7 @@ namespace footballstats.Utils
 
             game.LineReferees = GetIfExists(game.LineReferees);
             game.MainReferee = GetIfExists(game.MainReferee);
-            //game.Teams = GetIfExists(game.Teams);
+            game.Teams = GetIfExists(game.Teams);
 
             context.Add(game);
             context.SaveChanges();
@@ -59,22 +58,40 @@ namespace footballstats.Utils
             return listWithIds;
         }
 
-        public Referee GetIfExists(Referee r)
+        public Team GetIfExists(Team jsonEntity)
         {
-            var referee = context
+            var dbEntity = context
+                .Team
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Title == jsonEntity.Title);
+
+            if (dbEntity != null)
+            {
+                context.Entry(dbEntity).State = EntityState.Modified;
+                return dbEntity;
+            }
+
+            return jsonEntity;
+        }
+
+        public Referee GetIfExists(Referee jsonEntity)
+        {
+            var dbEntity = context
                 .Referee
                 .AsNoTracking()
                 .FirstOrDefault(x =>
-                x.Firstname == r.Firstname &&
-                x.Lastname == r.Lastname);
+                x.Firstname == jsonEntity.Firstname &&
+                x.Lastname == jsonEntity.Lastname);
 
-            if (referee != null)
+            if (dbEntity != null)
             {
-                context.Entry(referee).State = EntityState.Modified;
-                return referee;
+                context.Entry(dbEntity).State = EntityState.Modified;
+                return dbEntity;
             }
-            return r;
+
+            return jsonEntity;
         }
+
 
         public bool GameExists(Game json) =>
             context.Game.Any(g =>
