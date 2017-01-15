@@ -22,6 +22,18 @@ namespace footballstats.Controllers
         // GET: Referees
         public async Task<IActionResult> Index()
         {
+            foreach (var referee in _context.Referee)
+            {
+                var games = _context.Game.Where(g => g.MainReferee.Id == referee.Id);
+                var gamesCount = games.Count();
+                if (gamesCount == 0)
+                    continue;
+                referee.Penalties = games
+                    .SelectMany(x => x.Teams)
+                    .SelectMany(y => y.PenaltiesRecord.Penalties)
+                    .Count();
+                referee.AvgPenaltiesPerGame = referee.Penalties / gamesCount;
+            }
             return View(await _context.Referee.ToListAsync());
         }
 

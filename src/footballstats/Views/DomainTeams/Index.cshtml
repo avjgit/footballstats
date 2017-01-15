@@ -5,7 +5,6 @@
 }
 
 <h2>Index</h2>
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -36,6 +35,23 @@
             <th>
                 @Html.DisplayNameFor(model => model.Points)
             </th>
+            <td>
+                @Html.DisplayNameFor(model => model.PenaltyGoals)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Defendors)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Forwards)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.Goalkeepers)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.TotalTimePlayed)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.AverageTimePlayed)
             @*<th>
                 @Html.DisplayNameFor(model => model.Place)
             </th>*@
@@ -67,6 +83,24 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PenaltyGoals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Defendors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Forwards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Goalkeepers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalTimePlayed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AverageTimePlayed)
             </td>
             @*<td>
                 @Html.DisplayFor(modelItem => item.Place)

@@ -8,9 +8,10 @@ using footballstats.Data;
 namespace footballstats.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170115213257_more_fields")]
+    partial class more_fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -72,6 +73,8 @@ namespace footballstats.Data.Migrations
 
                     b.Property<int?>("ChangeRecordId");
 
+                    b.Property<int?>("GameId");
+
                     b.Property<int>("PlayerIn");
 
                     b.Property<int?>("PlayerIn_Id");
@@ -87,6 +90,8 @@ namespace footballstats.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChangeRecordId");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("PlayerIn_Id");
 
@@ -184,6 +189,8 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("GameId");
+
                     b.Property<int>("GoalType");
 
                     b.Property<int?>("GoalsListId");
@@ -197,6 +204,8 @@ namespace footballstats.Data.Migrations
                     b.Property<string>("TimeRecord");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("GoalsListId");
 
@@ -230,6 +239,8 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("GameId");
+
                     b.Property<int?>("PenaltiesListId");
 
                     b.Property<int?>("PlayerId");
@@ -241,6 +252,8 @@ namespace footballstats.Data.Migrations
                     b.Property<string>("TimeRecord");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("PenaltiesListId");
 
@@ -257,6 +270,8 @@ namespace footballstats.Data.Migrations
                     b.Property<float>("AvgGoalsMissed");
 
                     b.Property<string>("Firstname");
+
+                    b.Property<int?>("GameId");
 
                     b.Property<int>("GamesPlayed");
 
@@ -289,6 +304,8 @@ namespace footballstats.Data.Migrations
                     b.Property<int>("YellowCards");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("GoalId");
 
@@ -512,6 +529,10 @@ namespace footballstats.Data.Migrations
                         .WithMany("Changes")
                         .HasForeignKey("ChangeRecordId");
 
+                    b.HasOne("footballstats.Models.Game")
+                        .WithMany("Changes")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("footballstats.Models.Player", "PlayerIn_")
                         .WithMany()
                         .HasForeignKey("PlayerIn_Id");
@@ -537,6 +558,10 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.Goal", b =>
                 {
+                    b.HasOne("footballstats.Models.Game")
+                        .WithMany("Goals")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("footballstats.Models.GoalsList")
                         .WithMany("Goals")
                         .HasForeignKey("GoalsListId");
@@ -548,6 +573,10 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.Penalty", b =>
                 {
+                    b.HasOne("footballstats.Models.Game")
+                        .WithMany("Penalties")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("footballstats.Models.PenaltiesList")
                         .WithMany("Penalties")
                         .HasForeignKey("PenaltiesListId");
@@ -559,6 +588,10 @@ namespace footballstats.Data.Migrations
 
             modelBuilder.Entity("footballstats.Models.Player", b =>
                 {
+                    b.HasOne("footballstats.Models.Game")
+                        .WithMany("MainPlayers")
+                        .HasForeignKey("GameId");
+
                     b.HasOne("footballstats.Models.Goal")
                         .WithMany("PlayersPassed")
                         .HasForeignKey("GoalId");

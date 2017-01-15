@@ -31,11 +31,12 @@ namespace footballstats.Controllers
 
             foreach (var team in _context.DomainTeam)
             {
-                team.GoalsWon = _context
+                var goalsWon = _context
                     .Team
                     .Where(t => t.Title == team.Title)
-                    .SelectMany(t => t.GoalsRecord.Goals)
-                    .Count();
+                    .SelectMany(t => t.GoalsRecord.Goals);
+
+                team.GoalsWon = goalsWon.Count();
 
                 team.GoalsLost = _context
                     .Game
@@ -86,7 +87,16 @@ namespace footballstats.Controllers
                     + team.WinsDuringAddedTime * winDuringAddedTimePoints
                     + team.LossesDuringAddedTime * lossDuringAddedTimePoints
                     + team.LossesDuringMainTime * lossDuringMainTimePoints;
-                        
+
+                team.PenaltyGoals = goalsWon.Where(w => w.GoalType == GoalType.Penalty).Count();
+
+                var players = _context.Player.Where(u => u.Team == team.Title);
+                team.Defendors = players.Count(d => d.Role == PlayerRole.Defender);
+                team.Forwards = players.Count(d => d.Role == PlayerRole.Forward);
+                team.Goalkeepers = players.Count(d => d.Role == PlayerRole.Goalkeeper);
+
+                //public TimeSpan TotalTimePlayed { get; set; }
+                //public TimeSpan AverageTimePlayed { get; set; }
             }
 
             foreach (var e in  _context.DomainTeam)

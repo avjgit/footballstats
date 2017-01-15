@@ -18,7 +18,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Lastname)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Penalties)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvgPenaltiesPerGame)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -31,9 +36,10 @@
                 @Html.DisplayFor(modelItem => item.Lastname)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Penalties)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvgPenaltiesPerGame)
             </td>
         </tr>
 }

@@ -49,6 +49,13 @@ namespace footballstats.Models
         public int Goals { get; set; }
 
         public int Passes { get; set; }
+        public int GamesPlayed { get; set; }
+        public int GamesPlayedInMainTeam { get; set; }
+        public int MinutesPlayed { get; set; }
+        public int YellowCards { get; set; }
+        public int RedCards { get; set; }
+        public int TotalGoalsMissed { get; set; }
+        public float AvgGoalsMissed { get; set; }
     }
 
     public class PlayersList

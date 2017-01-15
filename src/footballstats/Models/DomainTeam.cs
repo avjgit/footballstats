@@ -17,5 +17,11 @@ namespace footballstats.Models
         public int LossesDuringAddedTime { get; set; }
         public int Points { get; set; }
         public int Place { get; set; }
+        public int PenaltyGoals { get; set; }
+        public int Defendors { get; set; }
+        public int Forwards { get; set; }
+        public int Goalkeepers { get; set; }
+        public TimeSpan TotalTimePlayed { get; set; }
+        public TimeSpan AverageTimePlayed { get; set; }
     }
 }

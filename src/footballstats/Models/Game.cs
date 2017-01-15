@@ -35,13 +35,6 @@ namespace footballstats.Models
         [JsonProperty("Komanda")]
         public List<Team> Teams { get; set; }
 
-        public List<Player> MainPlayers { get; set; }
-
-        public List<Penalty> Penalties { get; set; }
-
-        public List<Change> Changes { get; set; }
-
-        public List<Goal> Goals { get; set; }
         #endregion
     }
 }
