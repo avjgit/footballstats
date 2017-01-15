@@ -1,7 +1,6 @@
 ﻿using footballstats.Data;
 using footballstats.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -25,28 +24,29 @@ namespace footballstats.Utils
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    new Repository(context).Save(gameRecord.Spele);
+                    new Parser(context).ParseAndSave(gameRecord.Spele);
                 }
             }
         }
     }
 
-    public class Repository
+    public class Parser
     {
         ApplicationDbContext context;
 
-        public Repository(ApplicationDbContext _context)
+        public Parser(ApplicationDbContext _context)
         {
             context = _context;
         }
 
-        public void Save(Game game)
+        public void ParseAndSave(Game game)
         {
             if (GameExists(game))
                 return;
 
             game.LineReferees = GetIfExists(game.LineReferees);
             game.MainReferee = GetIfExists(game.MainReferee);
+            //game.Teams = GetIfExists(game.Teams);
 
             context.Add(game);
             context.SaveChanges();
