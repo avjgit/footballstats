@@ -16,5 +16,6 @@ namespace footballstats.Models
         public int WinsDuringAddedTime { get; set; }
         public int LossesDuringAddedTime { get; set; }
         public int Points { get; set; }
+        public int Place { get; set; }
     }
 }

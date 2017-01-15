@@ -13,63 +13,63 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.GoalsLost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GoalsWon)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LossesDuringAddedTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LossesDuringMainTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Points)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WinsDuringMainTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.WinsDuringAddedTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WinsDuringMainTime)
+                @Html.DisplayNameFor(model => model.LossesDuringMainTime)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.LossesDuringAddedTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GoalsWon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GoalsLost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.OrderBy(x => x.Place)) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.GoalsLost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoalsWon)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LossesDuringAddedTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LossesDuringMainTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Points)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WinsDuringAddedTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WinsDuringMainTime)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.WinsDuringAddedTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LossesDuringMainTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LossesDuringAddedTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalsWon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalsLost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Place)
             </td>
         </tr>
 }
