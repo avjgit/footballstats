@@ -10,48 +10,57 @@ namespace footballstats.Utils
 {
     public class Repository
     {
-        ApplicationDbContext _context;
-
-        public Repository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         public void Save(Game game)
         {
-            if (GameExists(game))
-                return;
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-footballstats-c97e58ed-833c-4919-a857-dfbc2f48b102;Trusted_Connection=True;MultipleActiveResultSets=true;");
 
-            //var lineReferees = game.LineReferees;
-            //game.LineReferees = new List<Referee>();
-            //foreach (var referee in lineReferees)
-            //    game.LineReferees.Add(GetOrCreate(referee));
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                if (GameExists(context, game))
+                    return;
 
-            game.MainReferee = GetOrCreate(game.MainReferee);
+                var lineReferees = game.LineReferees;
+                game.LineReferees = new List<Referee>();
+                foreach (var referee in lineReferees)
+                {
+                    game.LineReferees.Add(GetOrCreate(context, referee));
+                }
 
-            //var composedGame = Create(game);
+                game.MainReferee = GetOrCreate(context, game.MainReferee);
 
-            _context.Add(game);
+                //var composedGame = Create(game);
+
+                context.Add(game);
+                context.SaveChanges();
+            }
         }
-        
-        public void DetachAll()
+
+        //public void DetachAll()
+        //{
+        //    foreach (var dbEntityEntry in _context.ChangeTracker.Entries())
+        //        if (dbEntityEntry.Entity != null)
+        //            dbEntityEntry.State = EntityState.Detached;
+        //}
+
+        public Referee GetOrCreate(ApplicationDbContext _context, Referee r)
         {
-            foreach (var dbEntityEntry in _context.ChangeTracker.Entries())
-                if (dbEntityEntry.Entity != null)
-                    dbEntityEntry.State = EntityState.Detached;
-        }
-
-        public Referee GetOrCreate(Referee r) =>
-            _context
+            var referee = _context
                 .Referee
                 .AsNoTracking()
                 .FirstOrDefault(x =>
                 x.Firstname == r.Firstname &&
-                x.Lastname == r.Lastname)
-            ?? r;
+                x.Lastname == r.Lastname);
 
+            if (referee != null)
+            {
+                _context.Entry(referee).State = EntityState.Modified;
+                return referee;
+            }
+            return r;
+        }
 
-        public bool GameExists(Game json) =>
+        public bool GameExists(ApplicationDbContext _context, Game json) =>
             _context.Game.Any(g =>
                 json.Date == g.Date &&
                 json.Place == g.Place &&

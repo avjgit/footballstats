@@ -175,7 +175,7 @@ namespace footballstats.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(ICollection<IFormFile> files)
         {
-            var db = new Repository(_context);
+            var db = new Repository();
 
             foreach (var file in files)
             {
@@ -188,10 +188,6 @@ namespace footballstats.Controllers
                         if (ModelState.IsValid)
                         {
                             db.Save(gameRecord.Spele);
-
-                            await _context.SaveChangesAsync();
-
-                            //db.DetachAll();
                         }
                     }
                 }
