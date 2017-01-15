@@ -187,9 +187,11 @@ namespace footballstats.Controllers
 
                         if (ModelState.IsValid)
                         {
-                            db.Save(gameRecord);
+                            db.Save(gameRecord.Spele);
 
                             await _context.SaveChangesAsync();
+
+                            //db.DetachAll();
                         }
                     }
                 }

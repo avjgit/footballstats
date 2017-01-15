@@ -1,5 +1,6 @@
 ﻿using footballstats.Data;
 using footballstats.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,15 @@ namespace footballstats.Utils
 {
     public class Repository
     {
-        private readonly ApplicationDbContext _context;
 
         public Repository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public void Save(GameRecord json)
         {
-            if (Exists(json.Spele))
                 return;
 
-            var game = Create(json.Spele);
-            
             _context.Add(game);
         }
 
@@ -33,15 +29,6 @@ namespace footballstats.Utils
                 json.Teams.All(jsonTeam => g.Teams.Any(
                     dbteam => dbteam.Title == jsonTeam.Title)));
 
-        public Game Create(Game json)
-        {
-            return new Game
-            {
-                Date = json.Date,
-                Place = json.Place,
-                Spectators = json.Spectators
-            };
-        }
 
     }
 }
