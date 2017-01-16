@@ -42,7 +42,7 @@ namespace footballstats.Controllers
                 var playersTeamGames = _context.Game
                     .SelectMany(g => g.Teams)
                     .Where(t => t.Title == player.Team);
-                
+
                 player.GamesPlayedInMainTeam = playersTeamGames
                     //.Where(t => t.MainPlayersRecord.PlayersNrs.Any(n => n.Nr == player.Number)).Count();
                     .SelectMany(t => t.MainPlayersRecord.PlayersNrs)
@@ -64,6 +64,29 @@ namespace footballstats.Controllers
                 .Player
                 .OrderByDescending(p => p.Goals)
                 .ThenByDescending(z => z.Passes).ToListAsync());
+        }
+        public async Task<IActionResult> Goalkeepers()
+        {
+            var goalkeepers = _context.Player.Where(p => p.Role == PlayerRole.Goalkeeper);
+            foreach (var player in goalkeepers)
+            {
+                var teamsGames = _context.Game
+                    .Where(game => 
+                    //game.Teams.Any(t => t.Title == player.Team) &&
+                                   game.Teams.Where(t => t.Title == player.Team)
+                                   .SelectMany(t => t.MainPlayersRecord.PlayersNrs)
+                                   .Any(n => n.Nr == player.Number))
+                        //.Where(t => t.MainPlayersRecord.PlayersNrs.Any(n => n.Nr == player.Number))
+                    ;
+
+                player.TotalGoalsMissed = teamsGames
+                    .SelectMany(g => g.Teams.Where(t => t.Title != player.Team))
+                    .SelectMany(t => t.GoalsRecord.Goals)
+                    .Count();
+
+                player.AvgGoalsMissed = player.TotalGoalsMissed / teamsGames.Count();                
+            }
+            return View(await goalkeepers.ToListAsync());
         }
 
         // GET: Players/Details/5
