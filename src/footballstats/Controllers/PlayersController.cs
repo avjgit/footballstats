@@ -38,6 +38,27 @@ namespace footballstats.Controllers
                     .SelectMany(f => f.Passers)
                     .Where(h => h.Nr == player.Number)
                     .Count();
+
+                var playersTeamGames = _context.Game
+                    .SelectMany(g => g.Teams)
+                    .Where(t => t.Title == player.Team);
+                
+                player.GamesPlayedInMainTeam = playersTeamGames
+                    //.Where(t => t.MainPlayersRecord.PlayersNrs.Any(n => n.Nr == player.Number)).Count();
+                    .SelectMany(t => t.MainPlayersRecord.PlayersNrs)
+                    .Where(n => n.Nr == player.Number).Count();
+
+                //player.GamesPlayed = playersTeamGames
+                //    .Where(t =>
+                //        t.MainPlayersRecord.PlayersNrs.Any(n => n.Nr == player.Number) ||
+                //        t.ChangeRecord.Changes.Any(c => c.PlayerIn == player.Number)
+                //    ).Count();
+
+                //player.YellowCards = playersTeamGames
+                //    .Count(g => g.PenaltiesRecord.Penalties.Where(p => p.PlayerNr == player.Number).Count() == 1);
+
+                //player.RedCards = playersTeamGames
+                //    .Count(g => g.PenaltiesRecord.Penalties.Where(p => p.PlayerNr == player.Number).Count() == 2);
             }
             return View(await _context
                 .Player
